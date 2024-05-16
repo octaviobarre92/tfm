@@ -43,7 +43,7 @@ const MenuItem = ({title, icon, path}) => {
 	return (
 		<>
 			{icon && <Icon type={icon} /> }
-			<span>{setLocale(title)}</span>
+			<span>{title}</span>
 			{path && <Link onClick={closeMobileNav} to={path} />}
 		</>
 	)
