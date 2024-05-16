@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
 
 
-export const DefaultDashboard = ({goDashboard, dataUser}) => {
+export const Teachers = ({goDashboard, dataUser}) => {
   useEffect(()=>{
     goDashboard()
   },[])
   console.log("dataUser",dataUser);
   return (
     <>  
-      Dashboard
+      Teachers
     </>
   )
 }
@@ -24,4 +24,4 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(actionLogin.login("email", "password", ()=>{}));
   }
 });
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultDashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Teachers)

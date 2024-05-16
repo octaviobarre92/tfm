@@ -24,5 +24,20 @@ export const protectedRoutes = [
         key: 'dashboard.default',
         path: `${APP_PREFIX_PATH}/dashboards/default`,
         component: React.lazy(() => import('views/app-views/dashboards/default')),
+    },
+    {
+        key: 'students',
+        path: `${APP_PREFIX_PATH}/students`,
+        component: React.lazy(() => import('views/students')),
+    },
+    {
+        key: 'teachers',
+        path: `${APP_PREFIX_PATH}/teachers`,
+        component: React.lazy(() => import('views/teachers')),
+    },
+    {
+        key: 'calendars',
+        path: `${APP_PREFIX_PATH}/calendars`,
+        component: React.lazy(() => import('views/calendar')),
     }
 ]
