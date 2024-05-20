@@ -1,5 +1,6 @@
 import { takeEvery, takeLatest, take, call, fork, put } from "redux-saga/effects";
 import { types } from "../reducers/login"
+import {loginStep1} from "./middlewares"
 
 function* login() {
     yield takeLatest(types.LOGIN_REQUEST, loginAuth);
@@ -8,8 +9,8 @@ function* login() {
 export default login
 
 function* loginAuth({ user, password,navigate }) {
-    yield new Promise(resolve => setTimeout(resolve, 2000));
-    console.log("acqw",user);
+    const response = yield call(loginStep1,user, password)
+    console.log(response);
     yield put({
         type: types.LOGIN_SUCCESS,
         dataUser: {

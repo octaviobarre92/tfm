@@ -15,48 +15,33 @@ import {
 } from 'store/slices/authSlice';
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
+import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
 
 export const LoginForm = props => {
 	
 	const navigate = useNavigate();
 
 	const { 
-		otherSignIn, 
 		showForgetPassword, 
 		hideAuthMessage,
-		onForgetPasswordClick,
-		showLoading,
-		signInWithGoogle,
-		signInWithFacebook,
-		extra, 
 		signIn, 
 		token, 
 		loading,
 		redirect,
 		showMessage,
 		message,
+		goLogin,
 		allowRedirect = true
 	} = props
 
 	const initialCredential = {
-		email: 'user1@themenate.net',
-		password: '2005ipo'
+		email: 'octaviobarre92@gmail.com',
+		password: '123'
 	}
 
 	const onLogin = values => {
-		showLoading()
-		signIn(values);
+		goLogin(values);
 	};
-
-	const onGoogleLogin = () => {
-		showLoading()
-		signInWithGoogle()
-	}
-
-	const onFacebookLogin = () => {
-		showLoading()
-		signInWithFacebook()
-	}
 
 	useEffect(() => {
 		if (token !== null && allowRedirect) {
@@ -69,31 +54,6 @@ export const LoginForm = props => {
 			};
 		}
 	});
-	
-	const renderOtherSignIn = (
-		<div>
-			<Divider>
-				<span className="text-muted font-size-base font-weight-normal">or connect with</span>
-			</Divider>
-			<div className="d-flex justify-content-center">
-				<Button 
-					onClick={() => onGoogleLogin()} 
-					className="mr-2" 
-					disabled={loading} 
-					icon={<CustomIcon svg={GoogleSVG}/>}
-				>
-					Google
-				</Button>
-				<Button 
-					onClick={() => onFacebookLogin()} 
-					icon={<CustomIcon svg={FacebookSVG}/>}
-					disabled={loading} 
-				>
-					Facebook
-				</Button>
-			</div>
-		</div>
-	)
 
 	return (
 		<>
@@ -113,7 +73,7 @@ export const LoginForm = props => {
 			>
 				<Form.Item 
 					name="email" 
-					label="Email" 
+					label="Correo electrónico" 
 					rules={[
 						{ 
 							required: true,
@@ -130,16 +90,7 @@ export const LoginForm = props => {
 					name="password" 
 					label={
 						<div className={`${showForgetPassword? 'd-flex justify-content-between w-100 align-items-center' : ''}`}>
-							<span>Password</span>
-							{
-								showForgetPassword && 
-								<span 
-									onClick={() => onForgetPasswordClick} 
-									className="cursor-pointer font-size-sm font-weight-normal text-muted"
-								>
-									Forget Password?
-								</span>
-							} 
+							<span>Contraseña</span>
 						</div>
 					} 
 					rules={[
@@ -153,13 +104,9 @@ export const LoginForm = props => {
 				</Form.Item>
 				<Form.Item>
 					<Button type="primary" htmlType="submit" block loading={loading}>
-						Sign In
+						Iniciar sesión
 					</Button>
 				</Form.Item>
-				{
-					otherSignIn ? renderOtherSignIn : null
-				}
-				{ extra }
 			</Form>
 		</>
 	)
@@ -172,6 +119,7 @@ LoginForm.propTypes = {
 		PropTypes.string,
 		PropTypes.element
 	]),
+	goLogin: PropTypes.func.isRequired
 };
 
 LoginForm.defaultProps = {
@@ -184,13 +132,12 @@ const mapStateToProps = ({auth}) => {
   return {loading, message, showMessage, token, redirect}
 }
 
-const mapDispatchToProps = {
-	signIn,
-	showAuthMessage,
-	showLoading,
-	hideAuthMessage,
-	signInWithGoogle,
-	signInWithFacebook
-}
+const mapDispatchToProps = (dispatch) => ({
+	goLogin: (data) => {
+		const {email,password}=data;
+		dispatch(actionLogin.login(email, password, ()=>{}));
+	}
+  });
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
