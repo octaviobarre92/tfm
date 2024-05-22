@@ -2,9 +2,11 @@
     background-color: cadetblue;
     border: 1px;
     border-radius: 54%;
-    width: 100px;
+    width: 75px;
     text-align: center;
-    margin: 22px;
-    height: 100px;
+    margin: 10px;
+    height: 75px;
     align-content: center;
+    cursor: pointer;
+    justify-content: center;
 }

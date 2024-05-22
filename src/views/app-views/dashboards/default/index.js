@@ -7,7 +7,6 @@ export const DefaultDashboard = ({goDashboard, dataUser}) => {
   useEffect(()=>{
     goDashboard()
   },[])
-  console.log("dataUser",dataUser);
   return (
     <>  
       Dashboard
@@ -21,7 +20,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   goDashboard: () => {
       
-      dispatch(actionLogin.login("email", "password", ()=>{}));
+      // dispatch(actionLogin.login("email", "password", ()=>{}));
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DefaultDashboard)

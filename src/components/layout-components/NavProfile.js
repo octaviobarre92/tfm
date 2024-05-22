@@ -13,6 +13,8 @@ import Flex from 'components/shared-components/Flex';
 import { signOut } from 'store/slices/authSlice';
 import styled from '@emotion/styled';
 import { FONT_WEIGHT, MEDIA_QUERIES, SPACER, FONT_SIZES } from 'constants/ThemeConstant'
+import { AUTH_TOKEN } from 'constants/AuthConstant';
+import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
 
 const Icon = styled.div(() => ({
 	fontSize: FONT_SIZES.LG
@@ -51,7 +53,8 @@ const MenuItemSignOut = (props) => {
 	const dispatch = useDispatch();
 
 	const handleSignOut = () => {
-		dispatch(signOut())
+		localStorage.removeItem(AUTH_TOKEN);
+		dispatch(actionLogin.resetLogin())
 	}
 
 	return (

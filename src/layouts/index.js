@@ -12,7 +12,7 @@ const AuthLayout = lazy(() => import('./AuthLayout'));
 
 const Layouts = () => {
 
-	const token = useSelector(state => state.auth.token);
+	const token = useSelector(state => state.Login.token);
 	const blankLayout = useSelector(state => state.theme.blankLayout);
 
 	const Layout = token && !blankLayout ? AppLayout : AuthLayout;

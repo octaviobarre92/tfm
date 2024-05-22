@@ -5,27 +5,27 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/CustomIcon'
-import { 
-	signIn, 
-	showLoading, 
-	showAuthMessage, 
-	hideAuthMessage, 
-	signInWithGoogle, 
-	signInWithFacebook 
+import {
+	signIn,
+	showLoading,
+	showAuthMessage,
+	hideAuthMessage,
+	signInWithGoogle,
+	signInWithFacebook
 } from 'store/slices/authSlice';
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
 import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
 
 export const LoginForm = props => {
-	
+
 	const navigate = useNavigate();
 
-	const { 
-		showForgetPassword, 
+	const {
+		showForgetPassword,
 		hideAuthMessage,
-		signIn, 
-		token, 
+		signIn,
+		token,
 		loading,
 		redirect,
 		showMessage,
@@ -42,11 +42,11 @@ export const LoginForm = props => {
 	const onLogin = values => {
 		goLogin(values);
 	};
-
+	console.log("acaaa");
 	useEffect(() => {
-		if (token !== null && allowRedirect) {
-			navigate(redirect)
-		}
+		// if (token !== null && allowRedirect) {
+		// 	navigate(redirect)
+		// }
 		if (showMessage) {
 			const timer = setTimeout(() => hideAuthMessage(), 3000)
 			return () => {
@@ -57,50 +57,50 @@ export const LoginForm = props => {
 
 	return (
 		<>
-			<motion.div 
-				initial={{ opacity: 0, marginBottom: 0 }} 
-				animate={{ 
+			<motion.div
+				initial={{ opacity: 0, marginBottom: 0 }}
+				animate={{
 					opacity: showMessage ? 1 : 0,
-					marginBottom: showMessage ? 20 : 0 
-				}}> 
+					marginBottom: showMessage ? 20 : 0
+				}}>
 				<Alert type="error" showIcon message={message}></Alert>
 			</motion.div>
-			<Form 
-				layout="vertical" 
-				name="login-form" 
+			<Form
+				layout="vertical"
+				name="login-form"
 				initialValues={initialCredential}
 				onFinish={onLogin}
 			>
-				<Form.Item 
-					name="email" 
-					label="Correo electrónico" 
+				<Form.Item
+					name="email"
+					label="Correo electrónico"
 					rules={[
-						{ 
+						{
 							required: true,
 							message: 'Please input your email',
 						},
-						{ 
+						{
 							type: 'email',
 							message: 'Please enter a validate email!'
 						}
 					]}>
-					<Input prefix={<MailOutlined className="text-primary" />}/>
+					<Input prefix={<MailOutlined className="text-primary" />} />
 				</Form.Item>
-				<Form.Item 
-					name="password" 
+				<Form.Item
+					name="password"
 					label={
-						<div className={`${showForgetPassword? 'd-flex justify-content-between w-100 align-items-center' : ''}`}>
+						<div className={`${showForgetPassword ? 'd-flex justify-content-between w-100 align-items-center' : ''}`}>
 							<span>Contraseña</span>
 						</div>
-					} 
+					}
 					rules={[
-						{ 
+						{
 							required: true,
 							message: 'Please input your password',
 						}
 					]}
 				>
-					<Input.Password prefix={<LockOutlined className="text-primary" />}/>
+					<Input.Password prefix={<LockOutlined className="text-primary" />} />
 				</Form.Item>
 				<Form.Item>
 					<Button type="primary" htmlType="submit" block loading={loading}>
@@ -127,17 +127,18 @@ LoginForm.defaultProps = {
 	showForgetPassword: false
 };
 
-const mapStateToProps = ({auth}) => {
-	const {loading, message, showMessage, token, redirect} = auth;
-  return {loading, message, showMessage, token, redirect}
+const mapStateToProps = ({ auth, Login }) => {
+	const { loading, message, showMessage, redirect } = auth;
+	const { token } = Login
+	return { loading, message, showMessage, token, redirect }
 }
 
 const mapDispatchToProps = (dispatch) => ({
 	goLogin: (data) => {
-		const {email,password}=data;
-		dispatch(actionLogin.login(email, password, ()=>{}));
+		const { email, password } = data;
+		dispatch(actionLogin.login(email, password, () => { }));
 	}
-  });
+});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
