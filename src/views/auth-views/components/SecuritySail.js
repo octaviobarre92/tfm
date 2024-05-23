@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Form, Input, Divider, d, Row, Col, notification, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
@@ -31,6 +31,12 @@ export const SecuritySail = ({ dataUser, token, goDashboard, validateImageSucces
                 validateImageSuccess(token, 0)
                 goDashboard(token)
                 localStorage.setItem("auth_token", token)
+                notification.open({
+                    message: 'Credenciales correctas',
+                    description:
+                        'Bienvenido a la plataforma de asistencia!',
+                    icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
+                });
                 navigate("/app/dashboards/default")
             } else {
                 notification.open({

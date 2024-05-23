@@ -1,26 +1,128 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  Form,
+  Input,
+  Button,
+  Radio,
+  Select,
+  Cascader,
+  DatePicker,
+  InputNumber,
+  TreeSelect,
+  Switch,
+  Card,
+  Tabs,
+  notification
+} from 'antd';
 import { connect } from 'react-redux';
-import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
+import { actions as actionStudents, selectors as selectorStudents } from "store/reducers/students"
+import ListStudents from './_components/ListStudents';
+import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 
-export const Students = ({goDashboard, dataUser}) => {
-  useEffect(()=>{
-    goDashboard()
-  },[])
+export const Students = ({ saveStudent, isFetching }) => {
+  const [mode, setMode] = useState('registro');
+  const [componentSize, setComponentSize] = useState('small');
+
+  const handleModeChange = (e) => {
+    setMode(e.target.value);
+  };
+
+  const onFormLayoutChange = ({ size }) => {
+    setComponentSize(size);
+  };
+  const onSubmit = values => {
+    values.fecha_nacimiento=moment(values.fecha_nacimiento).format()
+    saveStudent(values);
+    notification.open({
+      message: 'Exitoso!',
+      description:
+        'Estudiante registrado correctamente, puedes visualizarlo en el apartado de Listado',
+      icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
+    });
+  };
+  const Formulario = () => {
+    return <Card loading={isFetching}>
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 14 }}
+        layout="horizontal"
+        initialValues={{ size: componentSize }}
+        onValuesChange={onFormLayoutChange}
+        size={componentSize}
+        onFinish={onSubmit}
+      >
+        <Form.Item name="cedula" label="Cedula">
+          <Input />
+        </Form.Item>
+        <Form.Item name="primer_nombre" label="Primer Nombre">
+          <Input />
+        </Form.Item>
+        <Form.Item name="segundo_nombre" label="Segundo Nombre">
+          <Input />
+        </Form.Item>
+        <Form.Item name="primer_apellido" label="Primer Apellido">
+          <Input />
+        </Form.Item>
+        <Form.Item name="segundo_apellido" label="Segundo Apellido">
+          <Input />
+        </Form.Item>
+        <Form.Item name="representante" label="Representante">
+          <Input />
+        </Form.Item>
+        <Form.Item name="correo_representante" label="Correo de representante">
+          <Input />
+        </Form.Item>
+        <Form.Item name="telefono_representante" label="Telefono de representante">
+          <Input />
+        </Form.Item>
+        <Form.Item name="direccion" label="Dirección">
+          <Input />
+        </Form.Item>
+        <Form.Item name="correo_estudiante" label="Correo de estudiante">
+          <Input />
+        </Form.Item>
+        <Form.Item name="fecha_nacimiento" label="Fecha de nacimiento">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit"   >
+            Guardar Estudiante
+          </Button>
+        </Form.Item>
+      </Form>
+    </Card>
+  }
   return (
-    <>  
-      Students
-    </>
-  )
+    <div>
+      <Card title="Estudiantes" bordered={false} style={{ width: "100%" }}>
+        <Radio.Group
+          onChange={handleModeChange}
+          value={mode}
+          style={{
+            marginBottom: 8,
+          }}
+        >
+          <Radio.Button value="registro">Registro</Radio.Button>
+          <Radio.Button value="list">Listado</Radio.Button>
+        </Radio.Group>
+        {mode === "registro" && <Formulario />}
+        {mode === "list" && <ListStudents />}
+
+      </Card>
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => ({
-  dataUser: selectorLogin.getDataUser(state),
+  isFetching: selectorStudents.getFetching(state),
 })
 const mapDispatchToProps = (dispatch) => ({
-  goDashboard: () => {
-      
-      // dispatch(actionLogin.login("email", "password", ()=>{}));
+  saveStudent: (dataStudent) => {
+    dispatch(actionStudents.saveStudents(dataStudent));
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Students)
+
+

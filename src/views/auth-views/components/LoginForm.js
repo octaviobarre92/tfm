@@ -77,11 +77,11 @@ export const LoginForm = props => {
 					rules={[
 						{
 							required: true,
-							message: 'Please input your email',
+							message: 'Por favor ingrese un correo electrónico',
 						},
 						{
 							type: 'email',
-							message: 'Please enter a validate email!'
+							message: 'Ingrese un correo electrónico valido!'
 						}
 					]}>
 					<Input prefix={<MailOutlined className="text-primary" />} />
@@ -96,7 +96,7 @@ export const LoginForm = props => {
 					rules={[
 						{
 							required: true,
-							message: 'Please input your password',
+							message: 'Por favor ingrese su contraseña',
 						}
 					]}
 				>
