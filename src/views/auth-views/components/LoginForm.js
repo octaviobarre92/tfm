@@ -42,11 +42,8 @@ export const LoginForm = props => {
 	const onLogin = values => {
 		goLogin(values);
 	};
-	console.log("acaaa");
+
 	useEffect(() => {
-		// if (token !== null && allowRedirect) {
-		// 	navigate(redirect)
-		// }
 		if (showMessage) {
 			const timer = setTimeout(() => hideAuthMessage(), 3000)
 			return () => {

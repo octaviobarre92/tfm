@@ -33,7 +33,7 @@ export const Students = ({ saveStudent, isFetching }) => {
     setComponentSize(size);
   };
   const onSubmit = values => {
-    values.fecha_nacimiento=moment(values.fecha_nacimiento).format()
+    values.fecha_nacimiento = moment(values.fecha_nacimiento).format()
     saveStudent(values);
     notification.open({
       message: 'Exitoso!',
@@ -53,25 +53,84 @@ export const Students = ({ saveStudent, isFetching }) => {
         size={componentSize}
         onFinish={onSubmit}
       >
-        <Form.Item name="cedula" label="Cedula">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese un número de cédula',
+            }
+          ]}
+          name="cedula"
+          label="Cedula">
           <Input />
         </Form.Item>
-        <Form.Item name="primer_nombre" label="Primer Nombre">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el primer nombre del estudiante',
+            }
+          ]}
+          name="primer_nombre"
+          label="Primer Nombre">
           <Input />
         </Form.Item>
-        <Form.Item name="segundo_nombre" label="Segundo Nombre">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el segundo nombre del estudiante',
+            }
+          ]}
+          name="segundo_nombre"
+          label="Segundo Nombre">
           <Input />
         </Form.Item>
-        <Form.Item name="primer_apellido" label="Primer Apellido">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el primer apellido del estudiante',
+            }
+          ]}
+          name="primer_apellido"
+          label="Primer Apellido">
           <Input />
         </Form.Item>
-        <Form.Item name="segundo_apellido" label="Segundo Apellido">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el segundo apellido del estudiante',
+            }
+          ]}
+          name="segundo_apellido"
+          label="Segundo Apellido">
           <Input />
         </Form.Item>
-        <Form.Item name="representante" label="Representante">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el nombre completo del representante',
+            }
+          ]}
+          name="representante"
+          label="Representante">
           <Input />
         </Form.Item>
-        <Form.Item name="correo_representante" label="Correo de representante">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el correo electronico del representante',
+            }, {
+              type: 'email',
+              message: 'Ingrese un correo electrónico valido!'
+            }
+          ]}
+          name="correo_representante"
+          label="Correo de representante">
           <Input />
         </Form.Item>
         <Form.Item name="telefono_representante" label="Telefono de representante">
@@ -80,10 +139,28 @@ export const Students = ({ saveStudent, isFetching }) => {
         <Form.Item name="direccion" label="Dirección">
           <Input />
         </Form.Item>
-        <Form.Item name="correo_estudiante" label="Correo de estudiante">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor ingrese el correo electronico del estudiante',
+            }, {
+              type: 'email',
+              message: 'Ingrese un correo electrónico valido!'
+            }
+          ]}
+          name="correo_estudiante" label="Correo de estudiante">
           <Input />
         </Form.Item>
-        <Form.Item name="fecha_nacimiento" label="Fecha de nacimiento">
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor seleccione la fecha de nacimiento',
+            }
+          ]}
+          name="fecha_nacimiento"
+          label="Fecha de nacimiento">
           <DatePicker />
         </Form.Item>
         <Form.Item>

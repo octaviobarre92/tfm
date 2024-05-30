@@ -37,7 +37,7 @@ const dashBoardNavTree = [{
     {
       key: 'calendars',
       path: `${APP_PREFIX_PATH}/calendars`,
-      title: 'Horario',
+      title: 'Gestión de cursos',
       icon: TableOutlined,
       breadcrumb: false,
       submenu: []
