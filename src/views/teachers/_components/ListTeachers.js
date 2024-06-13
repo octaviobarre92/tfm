@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {actions as actionsTeacher, selectors as selectorTeacher} from "store/reducers/teachers"
-import {Button, Card, Divider, Table} from "antd";
+import {Button, Card, Divider, Popconfirm, Table} from "antd";
 import ModalUpdateTeacher from "./ModalUpdateTeacher";
 
-const ListTeachers = ({dataTeacher, isFetching, getTeachers}) => {
+const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher}) => {
     const [showModal, setShowModal] = useState(false)
     const [item, setItem] = useState(null)
     const columns = [
@@ -47,7 +47,16 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers}) => {
                         loadTeacher(record)
                     }}>Editar</Button>
                     <Divider type="vertical"/>
-                    <Button>Delete</Button>
+                    <Popconfirm
+                        placement="left"
+                        title="Desea cambiar el estado del profesor?"
+                        description="Esto puede afectar a las operaciones que el profesor realice."
+                        onConfirm={() => confirmDeleteTeacher(record)}
+                        okText="Aceptar"
+                        cancelText="Cancelar"
+                    >
+                        {record.estado ? <Button danger>Eliminar</Button> : <Button type="primary">Restaurar</Button>}
+                    </Popconfirm>
                 </span>
             ),
         },
@@ -57,6 +66,9 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers}) => {
         getTeachers();
     }, [])
 
+    const confirmDeleteTeacher = ({id, estado}) => {
+        deleteTeacher({id, estado: Number(!estado)});
+    }
 
     const loadTeacher = (teacher) => {
         setItem(teacher);
@@ -82,6 +94,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getTeachers: () => {
         dispatch(actionsTeacher.loadTeachersAll());
+    },
+    deleteTeacher: (teacher) => {
+        dispatch(actionsTeacher.deleteTeachers(teacher));
     },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListTeachers)

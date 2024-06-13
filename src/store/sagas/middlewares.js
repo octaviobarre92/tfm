@@ -29,4 +29,7 @@ export const registerTeachers = (teacher) => {
 export const updateTeachers = (teacher) => {
     return post(apiURL, {...teacher, updateTeacher: 0})
 }
+export const deleteTeachers = (teacher) => {
+    return post(apiURL, {...teacher, changeStatusTeacher: 0})
+}
 

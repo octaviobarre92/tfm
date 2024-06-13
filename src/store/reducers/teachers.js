@@ -10,6 +10,11 @@ export const types = {
     UPDATE_TEACHERS_REQUEST: "teachers/UPDATE_TEACHERS_REQUEST",
     UPDATE_TEACHERS_SUCCESS: "teachers/UPDATE_TEACHERS_SUCCESS",
     UPDATE_TEACHERS_FAILURE: "teachers/UPDATE_TEACHERS_FAILURE",
+
+    DELETE_TEACHERS_REQUEST: "teachers/DELETE_TEACHERS_REQUEST",
+    DELETE_TEACHERS_SUCCESS: "teachers/DELETE_TEACHERS_SUCCESS",
+    DELETE_TEACHERS_FAILURE: "teachers/DELETE_TEACHERS_FAILURE",
+
     RESTABLECER_STORE: "teachers/RESTABLECER_STORE",
 }
 
@@ -46,6 +51,11 @@ export default (state = INITIAL_STATE, action = {}) => {
                 ...state,
                 fetching: true,
             };
+        case types.DELETE_TEACHERS_REQUEST:
+            return {
+                ...state,
+                fetching: true,
+            };
         case types.TEACHERS_SUCCESS:
             return {
                 ...state,
@@ -58,6 +68,12 @@ export default (state = INITIAL_STATE, action = {}) => {
                 fetching: false
             };
         case types.UPDATE_TEACHERS_SUCCESS:
+            return {
+                ...state,
+                fetching: false
+            };
+
+        case types.DELETE_TEACHERS_SUCCESS:
             return {
                 ...state,
                 fetching: false
@@ -81,6 +97,10 @@ export const actions = {
     resetTeachers: () => ({
         type: types.RESTABLECER_STORE,
 
+    }),
+    deleteTeachers: (dataTeacher) => ({
+        type: types.DELETE_TEACHERS_REQUEST,
+        dataTeacher
     })
 }
 
