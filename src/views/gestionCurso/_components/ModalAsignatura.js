@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, Modal, Select, notification } from 'antd';
+import { Button, Card, DatePicker, Form, Input, Modal, notification } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 
 
-export const ModalStudents = ({ updateStudent, item, setItem, showModal, setShowModal, cursos }) => {
+export const ModalAsignatura = ({ updateStudent, item, setItem, showModal, setShowModal }) => {
     const [componentSize, setComponentSize] = useState('small');
     const formRef = useRef(null);
     useEffect(() => {
@@ -26,7 +26,6 @@ export const ModalStudents = ({ updateStudent, item, setItem, showModal, setShow
         });
         setItem(null); setShowModal(!showModal)
     };
-    const { Option } = Select;
 
     return (
         <>
@@ -160,29 +159,6 @@ export const ModalStudents = ({ updateStudent, item, setItem, showModal, setShow
                             label="Fecha de nacimiento">
                             <Input type='date' />
                         </Form.Item>
-                        <Form.Item
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor seleccione un curso',
-                                }
-                            ]}
-                            name="fkCurso"
-                            label="Curso">
-                            <Select
-                                showSearch
-                                style={{ width: 200 }}
-                                placeholder="Seleccione un curso"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                            >
-                                {cursos.map((item) => (
-                                    <Option value={item.idCurso}>{`${item.nombre} - ${item.paralelo}`}</Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
                     </Form></Card>
             </Modal >
         </>
@@ -190,4 +166,4 @@ export const ModalStudents = ({ updateStudent, item, setItem, showModal, setShow
 }
 
 
-export default ModalStudents
+export default ModalAsignatura

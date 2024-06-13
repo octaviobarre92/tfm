@@ -19,16 +19,18 @@ import { actions as actionStudents, selectors as selectorStudents } from "store/
 import ListStudents from './_components/ListStudents';
 import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { actions as actionCourse, selectors as selectorCourse } from "store/reducers/course"
 
 
-export const Students = ({ saveStudent, isFetching }) => {
+export const Students = ({ saveStudent, isFetching, isFetchingCourse, cursos, loadCursos }) => {
   const [mode, setMode] = useState('registro');
   const [componentSize, setComponentSize] = useState('small');
-
+  useEffect(() => {
+    loadCursos()
+  }, [])
   const handleModeChange = (e) => {
     setMode(e.target.value);
   };
-
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
@@ -42,6 +44,8 @@ export const Students = ({ saveStudent, isFetching }) => {
       icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
     });
   };
+  const { Option } = Select;
+
   const Formulario = () => {
     return <Card loading={isFetching}>
       <Form
@@ -163,6 +167,29 @@ export const Students = ({ saveStudent, isFetching }) => {
           label="Fecha de nacimiento">
           <DatePicker />
         </Form.Item>
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: 'Por favor seleccione un curso',
+            }
+          ]}
+          name="fkCurso"
+          label="Curso">
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Seleccione un curso"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {cursos.map((item) => (
+              <Option value={item.idCurso}>{`${item.nombre} - ${item.paralelo}`}</Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit"   >
             Guardar Estudiante
@@ -171,6 +198,7 @@ export const Students = ({ saveStudent, isFetching }) => {
       </Form>
     </Card>
   }
+
   return (
     <div>
       <Card title="Estudiantes" bordered={false} style={{ width: "100%" }}>
@@ -184,8 +212,8 @@ export const Students = ({ saveStudent, isFetching }) => {
           <Radio.Button value="registro">Registro</Radio.Button>
           <Radio.Button value="list">Listado</Radio.Button>
         </Radio.Group>
-        {mode === "registro" && <Formulario />}
-        {mode === "list" && <ListStudents />}
+        {mode === "registro" && cursos.length > 0 && <Formulario />}
+        {mode === "list" && <ListStudents cursos={cursos} />}
 
       </Card>
     </div>
@@ -194,10 +222,15 @@ export const Students = ({ saveStudent, isFetching }) => {
 
 const mapStateToProps = (state) => ({
   isFetching: selectorStudents.getFetching(state),
+  isFetchingCursos: selectorCourse.getFetching(state),
+  cursos: selectorCourse.getdataCourse(state),
 })
 const mapDispatchToProps = (dispatch) => ({
   saveStudent: (dataStudent) => {
     dispatch(actionStudents.saveStudents(dataStudent));
+  },
+  loadCursos: () => {
+    dispatch(actionCourse.loadCourseAll());
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Students)
