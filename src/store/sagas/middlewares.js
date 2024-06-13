@@ -21,3 +21,13 @@ export const actualizarEstudiante = (dataStudent) => {
     return post(apiURL, { ...dataStudent, actualizarEstudiante: 0 })
 }
 
+export const cargarCursos = () => {
+    return post(apiURL, { getCourse: 0 })
+}
+export const guardarCurso = (dataCourse) => {
+    return post(apiURL, { ...dataCourse, registerCourse: 0 })
+}
+export const actualizarCurso = (dataCourse) => {
+    return post(apiURL, { ...dataCourse, updateCourse: 0 })
+}
+

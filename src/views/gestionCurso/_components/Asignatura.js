@@ -3,19 +3,13 @@ import { connect } from 'react-redux';
 import { actions as actionStudents, selectors as selectorStudents } from "store/reducers/students"
 import { Table, Divider, Tag, Card, Button } from 'antd';
 import Loading from 'components/shared-components/Loading';
-import { ModalStudents } from './ModalEditStudent';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ModalAsignatura } from './ModalAsignatura';
 
 
-export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetching, cursos }) => {
+const ListAsignatura = ({ getStudents, updateStudent, dataStudents, isFetching }) => {
     const [showModal, setShowModal] = useState(false)
     const [item, setItem] = useState(null)
     const columns = [
-        {
-            title: 'Curso',
-            dataIndex: 'curso',
-            key: 'curso'
-        },
         {
             title: 'Cedula',
             dataIndex: 'cedula',
@@ -52,9 +46,9 @@ export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetch
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <EditOutlined onClick={() => { cargarEstudiante(record) }} />
+                    <Button onClick={() => { cargarEstudiante(record) }}>Editar</Button>
                     <Divider type="vertical" />
-                    <DeleteOutlined style={{ color: "red" }} />
+                    <a>Delete</a>
                 </span>
             ),
         },
@@ -71,7 +65,7 @@ export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetch
             <Card loading={isFetching}>
                 <Table columns={columns} dataSource={dataStudents} />
             </Card>
-            {item && <ModalStudents cursos={cursos} item={item} setItem={setItem} updateStudent={updateStudent} showModal={showModal} setShowModal={setShowModal} />}
+            {item && <ModalAsignatura item={item} setItem={setItem} updateStudent={updateStudent} showModal={showModal} setShowModal={setShowModal} />}
         </>
     )
 }
@@ -89,4 +83,4 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(actionStudents.updateStudent(values));
     }
 });
-export default connect(mapStateToProps, mapDispatchToProps)(ListStudents)
+export default connect(mapStateToProps, mapDispatchToProps)(ListAsignatura)
