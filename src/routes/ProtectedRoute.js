@@ -15,13 +15,11 @@ const ProtectedRoute = ({ token, updateToken, dataUser }) => {
 
 	const location = useLocation()
 	const navigate = useNavigate();
-	console.log("dataUser",dataUser);
 	useEffect(() => {
 		if (!token) {
 			// if (localStorage.getItem(AUTH_TOKEN)) {
 			// 	updateToken(localStorage.getItem(AUTH_TOKEN))
 			// } else {
-				console.log("eliminar");
 				localStorage.removeItem(AUTH_TOKEN)
 				navigate("/auth/login")
 			// }

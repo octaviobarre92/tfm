@@ -13,6 +13,9 @@ export const types = {
     VALIDATE_IMAGE_SUCCESS_REQUEST: "login/VALIDATE_IMAGE_SUCCESS_REQUEST",
     VALIDATE_IMAGE_SUCCESS_FAILURE: "login/VALIDATE_IMAGE_SUCCESS_FAILURE",
 
+    DELETE_DATA_REQUEST: "login/DELETE_DATA_REQUEST",
+    DELETE_DATA_SUCCESS: "login/DELETE_DATA_SUCCESS",
+    DELETE_DATA_FAILURE: "login/DELETE_DATA_FAILURE",
 }
 
 
@@ -21,6 +24,8 @@ export const INITIAL_STATE = {
     hasLogged: false,
     verifyLogin: false,
     secondToken: null,
+    fetchingDelete: false,
+    statusDelete: "INITIATE",
     token: null,
     reintentos: 0,
     dataUser: localStorage.getItem("auth_token") ? JSON.parse(atob(localStorage.getItem("auth_token"))) : null,
@@ -61,6 +66,24 @@ export default (state = INITIAL_STATE, action = {}) => {
                 verifyLogin: true,
                 reintentos
             }
+        case types.DELETE_DATA_REQUEST:
+            return {
+                ...state,
+                fetchingDelete: true,
+                statusDelete: "INITIATE",
+            };
+        case types.DELETE_DATA_FAILURE:
+            return {
+                ...state,
+                fetchingDelete: false,
+                statusDelete: "ERROR",
+            };
+        case types.DELETE_DATA_SUCCESS:
+            return {
+                ...state,
+                fetchingDelete: false,
+                statusDelete: "ELIMINADO"
+            }
         case types.TOKEN_UPDATE:
             return {
                 ...state,
@@ -100,6 +123,12 @@ export const actions = {
         secondToken,
         dataUser
     }),
+    deleteData: (tabla, campo, id) => ({
+        type: types.DELETE_DATA_REQUEST,
+        tabla,
+        campo,
+        id
+    }),
     resetLogin: () => ({
         type: types.RESTABLECER_STORE,
 
@@ -114,4 +143,6 @@ export const selectors = {
     getToken: ({ Login }) => Login.secondToken,
     getToken2: ({ Login }) => Login.token,
     getReintentos: ({ Login }) => Login.reintentos,
+    getFetchingDelete: ({ Login }) => Login.fetchingDelete,
+    getStatusDelete: ({ Login }) => Login.statusDelete,
 }

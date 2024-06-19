@@ -1,11 +1,12 @@
 import { takeEvery, takeLatest, take, call, fork, put } from "redux-saga/effects";
 import { types } from "../reducers/login"
-import { loginStep1, validateSecurityData, validateSecurityDataSuccess } from "./middlewares"
+import { eliminar, loginStep1, validateSecurityData, validateSecurityDataSuccess } from "./middlewares"
 
 function* login() {
     yield takeLatest(types.LOGIN_REQUEST, loginAuth);
     yield takeLatest(types.VALIDATE_IMAGE_REQUEST, validateImage);
     yield takeLatest(types.VALIDATE_IMAGE_SUCCESS_REQUEST, validateImageSuccess);
+    yield takeLatest(types.DELETE_DATA_REQUEST, eliminarDato);
 }
 
 export default login
@@ -53,7 +54,18 @@ function* validateImageSuccess({ token, reintentos }) {
     })
     return false
 }
-
+function* eliminarDato({ tabla, campo, id }) {
+    const response = yield call(eliminar, tabla, campo, id)
+    if (response && response.data.status === 200) {
+        yield put({
+            type: types.DELETE_DATA_SUCCESS,
+        })
+    } else {
+        yield put({
+            type: types.DELETE_DATA_FAILURE,
+        })
+    }
+}
 
 
 

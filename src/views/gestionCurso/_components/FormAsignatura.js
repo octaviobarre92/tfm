@@ -8,7 +8,7 @@ import { actions as actionCourse, selectors as selectorCourse } from "store/redu
 
 
 
-const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateCourse }) => {
+const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal, updateAsignatura }) => {
     const [componentSize, setComponentSize] = useState('middle');
     const formRef = useRef(null);
     useEffect(() => {
@@ -20,7 +20,7 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
 
     if (showModal === "edit" && item !== null) {
         const onSubmit = values => {
-            updateCourse({ ...values, idCurso: item.idCurso });
+            updateAsignatura({ ...values, idAsignatura: item.idAsignatura });
             notification.open({
                 message: 'Exitoso!',
                 description:
@@ -30,7 +30,6 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
             setItem("new");
         };
         formRef.current && formRef.current.setFieldValue("nombre", item.nombre)
-        formRef.current && formRef.current.setFieldValue("paralelo", item.paralelo)
         return (
             <>
                 <Card loading={false}>
@@ -54,22 +53,11 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Registre el nombre del curso',
+                                    message: 'Registre el nombre de la asignatura',
                                 }
                             ]}
                             name="nombre"
-                            label="Nombre de curso">
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Ingrese el paralelo correspondiente',
-                                }
-                            ]}
-                            name="paralelo"
-                            label="Paralelo">
+                            label="Nombre de asignatura">
                             <Input />
                         </Form.Item>
                         <Form.Item >
@@ -77,14 +65,13 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
                                 setShowModal("new");
                                 setItem(null)
                                 formRef && formRef.current.setFieldValue("nombre", "")
-                                formRef && formRef.current.setFieldValue("paralelo", "")
                             }} type="default"  >
                                 Cancelar
                             </Button>
                             <Divider type="vertical" />
 
                             <Button type="primary" htmlType="submit"   >
-                                Editar Curso
+                                Editar Asignatura
                             </Button>
                         </Form.Item>
                     </Form></Card>
@@ -93,11 +80,11 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
     }
     if (showModal === "new") {
         const onSubmit = values => {
-            saveCourse(values);
+            saveAsignatura(values);
             notification.open({
                 message: 'Exitoso!',
                 description:
-                    'Curso creado correctamente, puedes visualizarlo en el apartado de Listado',
+                    'Asignatura creado correctamente, puedes visualizarlo en el apartado de Listado',
                 icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
             });
             setItem("new");
@@ -132,20 +119,9 @@ const FormCurso = ({ saveCourse, item, setItem, showModal, setShowModal, updateC
                             label="Nombre de curso">
                             <Input />
                         </Form.Item>
-                        <Form.Item
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Ingrese el paralelo correspondiente',
-                                }
-                            ]}
-                            name="paralelo"
-                            label="Paralelo">
-                            <Input />
-                        </Form.Item>
                         <Form.Item >
                             <Button type="primary" htmlType="submit"   >
-                                Guardar curso
+                                Guardar Asignatura
                             </Button>
                         </Form.Item>
                     </Form></Card>
@@ -160,16 +136,16 @@ const mapStateToProps = (state) => ({
     cursos: selectorCourse.getdataCourse(state),
 })
 const mapDispatchToProps = (dispatch) => ({
-    saveCourse: (dataCourse) => {
-        dispatch(actionCourse.saveCourse(dataCourse));
+    saveAsignatura: (dataCourse) => {
+        dispatch(actionCourse.saveAsignatura(dataCourse));
     },
-    updateCourse: (dataCourse) => {
-        dispatch(actionCourse.updateCourse(dataCourse));
+    updateAsignatura: (dataCourse) => {
+        dispatch(actionCourse.updateAsignatura(dataCourse));
     },
-    loadCursos: () => {
-        dispatch(actionCourse.loadCourseAll());
+    loadAsignatura: () => {
+        dispatch(actionCourse.loadAsignaturaAll());
     }
 });
-export default connect(mapStateToProps, mapDispatchToProps)(FormCurso)
+export default connect(mapStateToProps, mapDispatchToProps)(FormAsignatura)
 
 

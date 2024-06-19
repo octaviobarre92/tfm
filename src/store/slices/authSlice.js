@@ -16,7 +16,6 @@ export const signIn = createAsyncThunk('auth/login',async (data, { rejectWithVal
 	const { email, password } = data
 	try {
 		const response = await loginStep1({email, password})
-		console.log(response);
 		return
 		const token = response.data.token;
 		localStorage.setItem(AUTH_TOKEN, token);

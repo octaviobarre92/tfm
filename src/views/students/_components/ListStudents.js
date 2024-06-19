@@ -1,13 +1,14 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { actions as actionStudents, selectors as selectorStudents } from "store/reducers/students"
-import { Table, Divider, Tag, Card, Button } from 'antd';
+import { actions as actionLogin, selectors as selectorLogin } from "store/reducers/login"
+import { Table, Divider, Tag, Card, Button, notification } from 'antd';
 import Loading from 'components/shared-components/Loading';
 import { ModalStudents } from './ModalEditStudent';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 
-export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetching, cursos }) => {
+export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetching, cursos, deleteData, statusDelete }) => {
     const [showModal, setShowModal] = useState(false)
     const [item, setItem] = useState(null)
     const columns = [
@@ -54,7 +55,7 @@ export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetch
                 <span>
                     <EditOutlined onClick={() => { cargarEstudiante(record) }} />
                     <Divider type="vertical" />
-                    <DeleteOutlined style={{ color: "red" }} />
+                    <DeleteOutlined onClick={() => { eliminarEstudiante(record) }} style={{ color: "red" }} />
                 </span>
             ),
         },
@@ -62,9 +63,31 @@ export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetch
     useEffect(() => {
         getStudents()
     }, [])
+    useEffect(() => {
+        if (statusDelete === "ERROR") {
+            notification.open({
+                message: 'Error al eliminar este estudiante',
+                description:
+                    'Este estudiante tiene asistencias registradas por lo cual no puede ser eliminado, contacte con el Administrador',
+                icon: <CloseCircleOutlined style={{ color: 'red' }} />,
+            });
+        }
+        if (statusDelete === "ELIMINADO") {
+            notification.open({
+                message: 'Eliminado correctamente',
+                description:
+                    'Se elimino el estudiante de forma exitosa!',
+                icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
+            });
+            getStudents()
+        }
+    }, [statusDelete])
     const cargarEstudiante = (data) => {
         setItem(data);
         setShowModal(!showModal)
+    }
+    const eliminarEstudiante = (data) => {
+        deleteData("estudiantes", "idEstudiante", data.idEstudiante);
     }
     return (
         <>
@@ -79,14 +102,17 @@ export const ListStudents = ({ getStudents, updateStudent, dataStudents, isFetch
 const mapStateToProps = (state) => ({
     dataStudents: selectorStudents.getDataStudents(state),
     isFetching: selectorStudents.getFetching(state),
+    statusDelete: selectorLogin.getStatusDelete(state),
 })
 const mapDispatchToProps = (dispatch) => ({
     getStudents: () => {
-
         dispatch(actionStudents.loadStudentsAll());
     },
     updateStudent: (values) => {
         dispatch(actionStudents.updateStudent(values));
+    },
+    deleteData: (tabla, campo, id) => {
+        dispatch(actionLogin.deleteData(tabla, campo, id));
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListStudents)

@@ -1,3 +1,4 @@
+import { message } from "antd";
 import axios from "axios"
 // import accessToken from "./jwt-token-access/accessToken"
 
@@ -15,7 +16,12 @@ const axiosApi = axios.create({
 
 axiosApi.interceptors.response.use(
   response => response,
-  error => Promise.reject(error)
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    message.error('No se puede procesar la petición!');
+    Promise.resolve(error)
+  }
 )
 
 export async function get(url, config = {}) {
@@ -27,10 +33,10 @@ export async function post(url, data, config = {
     'Content-Type': 'multipart/form-data',
   }
 }) {
-  
   return axiosApi
     .post(url, { ...data }, { ...config })
-    .then(response => response.data)
+    .then(response => response.data).catch(error => {
+    })
 }
 
 export async function put(url, data, config = {}) {
