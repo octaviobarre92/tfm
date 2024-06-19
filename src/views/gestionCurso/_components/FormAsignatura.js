@@ -1,11 +1,9 @@
-import { Alert, Button, Card, Col, DatePicker, Divider, Form, Input, Modal, Row, notification } from 'antd';
-import moment from 'moment';
+import { Alert, Button, Card, Col, Divider, Form, Input, Row, notification } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import { actions as actionStudents, selectors as selectorStudents } from "store/reducers/students"
-import { CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { selectors as selectorStudents } from "store/reducers/students"
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { actions as actionCourse, selectors as selectorCourse } from "store/reducers/course"
-
 
 
 const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal, updateAsignatura }) => {
@@ -24,7 +22,7 @@ const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal
             notification.open({
                 message: 'Exitoso!',
                 description:
-                    'Curso actualizado de forma exitosa, puedes visualizarlo en el apartado de Listado',
+                    'Asignatura actualizado de forma exitosa, puedes visualizarlo en el apartado de Listado',
                 icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
             });
             setItem("new");
@@ -35,7 +33,7 @@ const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal
                 <Card loading={false}>
                     <Row>
                         <Col lg={20}>
-                            <Alert type="info" description={"Usted va a editar un curso para el plantel educativo, verificar que el curso y paralelo no este ya creado, el sistema le avisará si el curso existe."} />
+                            <Alert type="info" description={"Usted va a editar una asignatura para el plantel educativo, verificar que el curso y paralelo no este ya creado, el sistema le avisará si la asignatura existe."} />
                         </Col>
                     </Row>
                     <br />
@@ -94,7 +92,7 @@ const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal
                 <Card loading={false}>
                     <Row>
                         <Col lg={20}>
-                            <Alert type="info" description={"Usted va a registrar un nuevo curso para el plantel educativo, verificar que el curso y paralelo no este ya creado, el sistema le avisará si el curso existe."} />
+                            <Alert type="info" description={"Usted va a registrar una nueva asignatura para el plantel educativo, verificar que la asignatura no este ya creado, el sistema le avisará si la asignatura existe."} />
                         </Col>
                     </Row>
                     <br />
@@ -112,11 +110,11 @@ const FormAsignatura = ({ saveAsignatura, item, setItem, showModal, setShowModal
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Registre el nombre del curso',
+                                    message: 'Registre el nombre de la asignatura',
                                 }
                             ]}
                             name="nombre"
-                            label="Nombre de curso">
+                            label="Nombre de asignatura">
                             <Input />
                         </Form.Item>
                         <Form.Item >
