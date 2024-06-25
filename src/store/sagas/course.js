@@ -1,6 +1,6 @@
 import { takeEvery, takeLatest, take, call, fork, put } from "redux-saga/effects";
 import { types } from "../reducers/course"
-import { actualizarEstudiante, actualizarCurso, cargarCursos, guardarCurso, cargarAsignatura, guardarAsignatura, actualizarAsignatura, eliminar } from "./middlewares"
+import { GetAsignaturaWithCurso, GetCourseWithTeacher, GetStudentsWithAsignatura, actualizarEstudiante, actualizarCurso, cargarCursos, guardarCurso, cargarAsignatura, guardarAsignatura, actualizarAsignatura, eliminar, SendAsistencia } from "./middlewares"
 
 function* course() {
     yield takeLatest(types.COURSE_REQUEST, loadCourseAll);
@@ -10,9 +10,46 @@ function* course() {
     yield takeLatest(types.ASIGNATURA_REQUEST, loadAsignaturaAll);
     yield takeLatest(types.SAVE_ASIGNATURA_REQUEST, saveAsignatura);
     yield takeLatest(types.UPDATE_ASIGNATURA_REQUEST, updateAsignatura);
+
+    yield takeLatest(types.ASIGNATURA_WITH_TEACHER_REQUEST, getAsignaturaPorCurso);
+    yield takeLatest(types.CURSOS_TEACHER_REQUEST, getCursoTeacher);
+    yield takeLatest(types.ESTUDIANTES_WITH_ASIGNATURAS_REQUEST, getEstudiantesAsignatura);
+
+    yield takeLatest(types.ASISTENCIA_SEND_REQUEST, guardarAsistencia);
 }
 
 export default course
+function* guardarAsistencia({ dataAsistencia }) {
+    const response = yield call(SendAsistencia, dataAsistencia)
+    yield put({
+        type: types.ASISTENCIA_SEND_SUCCESS,
+        asignaturas: response.data.data
+    })
+}
+function* getAsignaturaPorCurso({ idCurso }) {
+    let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
+    const response = yield call(GetAsignaturaWithCurso, { idCurso: idCurso, ID_USER: dataUser["ID_USER"] })
+    yield put({
+        type: types.ASIGNATURA_WITH_TEACHER_SUCCESS,
+        asignaturas: response.data.data
+    })
+}
+function* getCursoTeacher() {
+    let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
+    const response = yield call(GetCourseWithTeacher, { ID_USER: dataUser["ID_USER"] })
+    yield put({
+        type: types.CURSOS_TEACHER_SUCCESS,
+        cursos: response.data.data
+    })
+}
+function* getEstudiantesAsignatura({ idAsignatura }) {
+    let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
+    const response = yield call(GetStudentsWithAsignatura, { idAsignatura: idAsignatura, ID_USER: dataUser["ID_USER"] })
+    yield put({
+        type: types.ESTUDIANTES_WITH_ASIGNATURAS_SUCCESS,
+        estudiantes: response.data.data
+    })
+}
 
 function* loadCourseAll() {
     const response = yield call(cargarCursos)
@@ -66,6 +103,8 @@ function* updateAsignatura({ dataAsignatura }) {
         type: types.ASIGNATURA_REQUEST,
     })
 }
+
+
 
 
 

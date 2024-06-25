@@ -43,6 +43,14 @@ const dashBoardNavTree = [{
       submenu: []
     },
     {
+      key: 'asistencias',
+      path: `${APP_PREFIX_PATH}/asistencias`,
+      title: 'Asistencia',
+      icon: TableOutlined,
+      breadcrumb: false,
+      submenu: []
+    },
+    {
       key: 'report',
       path: `${APP_PREFIX_PATH}/report`,
       title: 'Reportes',
