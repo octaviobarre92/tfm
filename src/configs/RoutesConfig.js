@@ -39,5 +39,10 @@ export const protectedRoutes = [
         key: 'gestion',
         path: `${APP_PREFIX_PATH}/gestion`,
         component: React.lazy(() => import('views/gestionCurso')),
+    },
+    {
+        key: 'asistencias',
+        path: `${APP_PREFIX_PATH}/asistencias`,
+        component: React.lazy(() => import('views/asistencias')),
     }
 ]

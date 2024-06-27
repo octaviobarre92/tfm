@@ -78,3 +78,16 @@ export const deleteAssignmentCourse = (idAssignment) => {
     return post(apiURL, {idAssignment,mdDeleteAssignmentCourse: 0})
 }
 
+
+export const GetAsignaturaWithCurso = (dataCurso) => {
+    return post(apiURL, { ...dataCurso, mdGetAsignaturaWithCurso: 0 })
+}
+export const GetCourseWithTeacher = (dataAsignatura) => {
+    return post(apiURL, { ...dataAsignatura, mdGetCourseWithTeacher: 0 })
+}
+export const GetStudentsWithAsignatura = (dataAsignatura) => {
+    return post(apiURL, { ...dataAsignatura, mdGetStudentsWithAsignatura: 0 })
+}
+export const SendAsistencia = (dataAsistencia) => {
+    return post(apiURL, { ...dataAsistencia, guardarAsistencia: 0 })
+}
