@@ -12,5 +12,37 @@
 }
 
 .img-security-selected {
-      border: 3px solid #3e79f7;
+    border: 3px solid #3e79f7;
+}
+
+.layout-subjects {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container-assignments {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 0.5rem;
+}
+
+.title-subject {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.badge-success {
+    background: #52c41a;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.badge-danger {
+    background: #f5222d;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
 }
