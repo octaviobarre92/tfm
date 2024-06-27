@@ -1,4 +1,4 @@
-import {call, put, takeLatest} from "redux-saga/effects";
+import {call, put, takeLatest, select} from "redux-saga/effects";
 import {types} from "../reducers/assignments"
 import {
     deleteAssignmentCourse,
@@ -9,6 +9,8 @@ import {
     saveAssignmentCourse,
     saveAssignmentSubject
 } from "./middlewares"
+import {selectors as selectorAssignment} from "store/reducers/assignments"
+
 
 function* assignments() {
     yield takeLatest(types.COURSES_WITH_ASSIGNMENT_REQUEST, loadAllCoursesWithAssignments);
@@ -45,27 +47,61 @@ function* loadAllSubjects() {
         dataAllSubjects: response.data.data
     })
 }
+
 function* $saveAssignmentSubject({subjectId, idAssignment}) {
+    const teacherSelectedAssignment = yield select(selectorAssignment.teacherSelectedAssignment);
+    const courseSelectedAssignment = yield select(selectorAssignment.courseSelectedAssignment);
+
     const response = yield call(saveAssignmentSubject, subjectId, idAssignment)
     yield put({
         type: types.SAVE_ASSIGNMENT_SUBJECTS_SUCCESS,
     })
+
+    yield put({
+        type: types.SELECTED_SUBJECTS_REQUEST,
+        userId: teacherSelectedAssignment.id,
+        courseId: courseSelectedAssignment.id
+    })
 }
+
 function* $saveAssignmentCourse({userId, courseId}) {
     const response = yield call(saveAssignmentCourse, userId, courseId)
     yield put({
         type: types.SAVE_ASSIGNMENT_COURSE_SUCCESS,
     })
+
+    yield put({
+        type: types.COURSES_WITH_ASSIGNMENT_REQUEST,
+        userId
+    })
 }
+
 function* $deleteAssignmentSubject({subjectId, courseId}) {
+    const teacherSelectedAssignment = yield select(selectorAssignment.teacherSelectedAssignment);
+    const courseSelectedAssignment = yield select(selectorAssignment.courseSelectedAssignment);
+
     const response = yield call(deleteAssignmentSubject, subjectId, courseId)
     yield put({
         type: types.DELETE_ASSIGNMENT_SUBJECTS_SUCCESS,
     })
+
+    yield put({
+        type: types.SELECTED_SUBJECTS_REQUEST,
+        userId: teacherSelectedAssignment.id,
+        courseId: courseSelectedAssignment.id
+    })
 }
+
 function* $deleteAssignmentCourse({idAssignment}) {
+    const teacherSelectedAssignment = yield select(selectorAssignment.teacherSelectedAssignment);
+
     const response = yield call(deleteAssignmentCourse, idAssignment)
     yield put({
         type: types.DELETE_ASSIGNMENT_COURSE_SUCCESS,
+    })
+
+    yield put({
+        type: types.COURSES_WITH_ASSIGNMENT_REQUEST,
+        userId: teacherSelectedAssignment.id
     })
 }

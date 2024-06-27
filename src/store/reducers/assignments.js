@@ -32,6 +32,8 @@ export const types = {
     DELETE_ASSIGNMENT_COURSE_FAILURE: "assignments/DELETE_ASSIGNMENT_COURSE_FAILURE",
 
     RESTABLECER_STORE: "assignments/RESTABLECER_STORE",
+    TEACHER_SELECTED_ASSIGNMENT_STORE: "assignments/TEACHER_SELECTED_ASSIGNMENT_STORE",
+    COURSE_SELECTED_ASSIGNMENT_STORE: "assignments/COURSE_SELECTED_ASSIGNMENT_STORE",
 }
 
 
@@ -42,7 +44,9 @@ export const INITIAL_STATE = {
     dataAssignments: [],
     dataCoursesWithAssignments: [],
     dataSelectedSubjects: [],
-    dataAllSubjects: []
+    dataAllSubjects: [],
+    dataTeacherSelectedAssignment: null,
+    dataCourseSelectedAssignment: null,
 }
 
 export default (state = INITIAL_STATE, action = {}) => {
@@ -53,6 +57,8 @@ export default (state = INITIAL_STATE, action = {}) => {
         dataCoursesWithAssignments,
         dataSelectedSubjects,
         dataAllSubjects,
+        dataTeacherSelectedAssignment,
+        dataCourseSelectedAssignment,
         ...rest
     } = action;
     switch (action.type) {
@@ -120,6 +126,17 @@ export default (state = INITIAL_STATE, action = {}) => {
                 fetchingAssignment: false,
             };
 
+        case types.TEACHER_SELECTED_ASSIGNMENT_STORE:
+            return {
+                ...state,
+                dataTeacherSelectedAssignment: action.teacher
+            };
+        case types.COURSE_SELECTED_ASSIGNMENT_STORE:
+            return {
+                ...state,
+                dataCourseSelectedAssignment: action.course
+            };
+
         default:
             return state;
     }
@@ -155,6 +172,14 @@ export const actions = {
     deleteAssignmentCourse: (idAssignment) => ({
         type: types.DELETE_ASSIGNMENT_COURSE_REQUEST,
         idAssignment
+    }),
+    saveTeacherSelectedAssignment: (teacher) => ({
+        type: types.TEACHER_SELECTED_ASSIGNMENT_STORE,
+        teacher
+    }),
+    saveCourseSelectedAssignment: (course) => ({
+        type: types.COURSE_SELECTED_ASSIGNMENT_STORE,
+        course
     })
 }
 
@@ -165,4 +190,6 @@ export const selectors = {
     getFetching: ({Assignments}) => Assignments.fetching,
     getFetchingSubjects: ({Assignments}) => Assignments.fetchingSubjects,
     getFetchingAssignment: ({Assignments}) => Assignments.fetchingAssignment,
+    teacherSelectedAssignment: ({Assignments}) => Assignments.dataTeacherSelectedAssignment,
+    courseSelectedAssignment: ({Assignments}) => Assignments.dataCourseSelectedAssignment,
 }

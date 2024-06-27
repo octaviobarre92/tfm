@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {actions as actionsTeacher, selectors as selectorTeacher} from "store/reducers/teachers"
+import {actions as actionsAssignment} from "store/reducers/assignments"
 import {Card, Dropdown, Popconfirm, Table} from "antd";
 import ModalUpdateTeacher from "./ModalUpdateTeacher";
 import {MoreOutlined} from '@ant-design/icons';
 import ModalAssignments from "./ModalAssignments";
 
-const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher}) => {
+const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher, saveTeacherSelectedAssignment}) => {
     const [showModal, setShowModal] = useState(false)
     const [item, setItem] = useState(null)
     const [assignment, setAssignment] = useState(null)
@@ -105,6 +106,7 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher}) => 
         setShowModal(true)
     }
     const loadTeacherAssignment = (teacher) => {
+        saveTeacherSelectedAssignment(teacher)
         setAssignment(teacher);
         setShowModal(true)
     }
@@ -118,7 +120,7 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher}) => 
             {item &&
                 <ModalUpdateTeacher item={item} setItem={setItem} showModal={showModal} setShowModal={setShowModal}/>}
 
-            {assignment && <ModalAssignments assignment={assignment} setAssignment={setAssignment} showModal={showModal} setShowModal={setShowModal}/>}
+            {assignment && <ModalAssignments showModal={showModal} setShowModal={setShowModal}/>}
         </>
     )
 }
@@ -133,6 +135,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteTeacher: (teacher) => {
         dispatch(actionsTeacher.deleteTeachers(teacher));
+    },
+    saveTeacherSelectedAssignment: (teacher) => {
+        dispatch(actionsAssignment.saveTeacherSelectedAssignment(teacher));
     },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListTeachers)

@@ -10,8 +10,6 @@ const ModalAssignments = ({
                               isFetching,
                               showModal,
                               setShowModal,
-                              assignment,
-                              setAssignment,
                               getAllSubjects,
                               getSelectedSubjects,
                               dataSelectedSubjects,
@@ -20,9 +18,12 @@ const ModalAssignments = ({
                               saveAssignmentSubject,
                               deleteAssignmentSubject,
                               saveAssignmentCourse,
-                              deleteAssignmentCourse
+                              deleteAssignmentCourse,
+                              saveTeacherSelectedAssignment,
+                              teacherSelectedAssignment,
+                              saveCourseSelectedAssignment,
+                              courseSelectedAssignment
                           }) => {
-    const [course, setCourse] = useState(null)
     const [alertConfirm, setAlertConfirm] = useState({showMessage: false, message: null, type: null})
 
     const columns = [
@@ -44,9 +45,9 @@ const ModalAssignments = ({
                 <>
                     {!record.idAssignment && <span
                         onClick={() => {
-                            assignmentCourse(assignment.id, record.id)
+                            assignmentCourse(teacherSelectedAssignment.id, record.id)
                         }}
-                        className={'badge-success'}>{'Asignar'}</span>}
+                        className='badge-success'>Asignar</span>}
                     {record.idAssignment && <Popconfirm
                         placement="left"
                         title="Desea eliminar esta asignación?"
@@ -55,7 +56,7 @@ const ModalAssignments = ({
                         okText="Aceptar"
                         cancelText="Cancelar"
                     >
-                        <span className={'badge-danger'}>{'Quitar'}</span>
+                        <span className='badge-danger'>Quitar</span>
                     </Popconfirm>}
                 </>
             )
@@ -72,8 +73,8 @@ const ModalAssignments = ({
     ];
 
     useEffect(() => {
-        if (assignment?.id) {
-            getCoursesWithAssignments(assignment.id);
+        if (teacherSelectedAssignment?.id) {
+            getCoursesWithAssignments(teacherSelectedAssignment.id);
             getAllSubjects();
         }
 
@@ -86,27 +87,26 @@ const ModalAssignments = ({
     }, []);
     const handleSelectedSubjects = (currentSubject) => {
         const subjectId = dataAllSubjects.find(({value}) => value === currentSubject).id
-        saveAssignmentSubject(subjectId, course.idAssignment)
+        saveAssignmentSubject(subjectId, courseSelectedAssignment.idAssignment)
 
-        getSelectedSubjects(assignment.id, course.id)
         setAlertConfirm({showMessage: true, message: "Materia asignada", type: 'success'})
     }
     const handleDeselectedSubjects = (currentSubject) => {
         const subjectId = dataAllSubjects.find(({value}) => value === currentSubject).id
-        deleteAssignmentSubject(subjectId, course.id)
+        deleteAssignmentSubject(subjectId, courseSelectedAssignment.idAssignment)
 
-        getSelectedSubjects(assignment.id, course.id)
         setAlertConfirm({showMessage: true, message: "Materia removida", type: 'success'})
     }
 
     const hideModal = () => {
-        setAssignment(null);
+        saveTeacherSelectedAssignment(null);
+        saveCourseSelectedAssignment(null);
         setShowModal(false)
     }
 
     const selectingCourse = (course) => {
-        setCourse(course)
-        getSelectedSubjects(assignment.id, course.id)
+        saveCourseSelectedAssignment(course)
+        getSelectedSubjects(teacherSelectedAssignment.id, course.id)
     }
 
     const hideAuthMessage = () => {
@@ -115,10 +115,12 @@ const ModalAssignments = ({
 
     const assignmentCourse = (userId, courseId) => {
         saveAssignmentCourse(userId, courseId)
-        getCoursesWithAssignments(assignment.id);
     }
 
     const confirmDeleteAssignment = (idAssignment) => {
+        if (idAssignment === courseSelectedAssignment.idAssignment) {
+            saveCourseSelectedAssignment(null)
+        }
         deleteAssignmentCourse(idAssignment)
     }
 
@@ -147,9 +149,10 @@ const ModalAssignments = ({
                     <Table columns={columns} dataSource={dataCourseWithAssignments}/>
                 </Card>
                 {
-                    course && <Card>
+                    courseSelectedAssignment && <Card className="h-100">
                         <div className="layout-subjects">
-                            <b className="title-subject">Asignaturas asignadas | {course.course} {course.parallel}</b>
+                            <b className="title-subject">Asignaturas asignadas
+                                | {courseSelectedAssignment.course} {courseSelectedAssignment.parallel}</b>
                             <Select
                                 loading={isFetchingSubjects}
                                 mode="multiple"
@@ -166,6 +169,7 @@ const ModalAssignments = ({
                         </div>
                     </Card>
                 }
+                {!courseSelectedAssignment && <b>Seleccione un curso para asignar materias al profesor.</b>}
             </div>
         </Modal>
     )
@@ -175,6 +179,8 @@ const mapStateToProps = (state) => ({
     dataCourseWithAssignments: selectorAssignment.loadAllCoursesWithAssignments(state),
     dataAllSubjects: selectorAssignment.loadAllSubjects(state),
     dataSelectedSubjects: selectorAssignment.loadSelectedSubjects(state),
+    teacherSelectedAssignment: selectorAssignment.teacherSelectedAssignment(state),
+    courseSelectedAssignment: selectorAssignment.courseSelectedAssignment(state),
     isFetching: selectorAssignment.getFetching(state),
     isFetchingSubjects: selectorAssignment.getFetchingSubjects(state)
 })
@@ -199,6 +205,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     deleteAssignmentCourse: (idAssignment) => {
         dispatch(actionsAssignment.deleteAssignmentCourse(idAssignment));
+    },
+    saveTeacherSelectedAssignment: (teacher) => {
+        dispatch(actionsAssignment.saveTeacherSelectedAssignment(teacher));
+    },
+    saveCourseSelectedAssignment: (course) => {
+        dispatch(actionsAssignment.saveCourseSelectedAssignment(course));
     },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ModalAssignments)
