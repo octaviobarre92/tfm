@@ -56,6 +56,27 @@ export const actualizarAsignatura = (dataAsignatura) => {
 export const eliminar = (tabla, campo, id) => {
     return post(apiURL, { tabla, campo, id, eliminar: 0 })
 }
+export const getAllCoursesWithAssignments = (userId) => {
+    return post(apiURL, {userId, mdGetAllCoursesWithAssignments: 0})
+}
+export const getSelectedSubjects = (userId, courseId) => {
+    return post(apiURL, {userId, courseId, mdGetSelectedSubjects: 0})
+}
+export const getAllSubjects = () => {
+    return post(apiURL, {mdGetAllSubjects: 0})
+}
+export const saveAssignmentSubject = (subjectId, idAssignment) => {
+    return post(apiURL, {subjectId, idAssignment,mdSaveAssignmentSubject: 0})
+}
+export const saveAssignmentCourse = (userId, courseId) => {
+    return post(apiURL, {userId, courseId, mdSaveAssignmentCourse: 0})
+}
+export const deleteAssignmentSubject = (subjectId, courseId) => {
+    return post(apiURL, {subjectId, courseId,mdDeleteAssignmentSubject: 0})
+}
+export const deleteAssignmentCourse = (idAssignment) => {
+    return post(apiURL, {idAssignment,mdDeleteAssignmentCourse: 0})
+}
 
 
 export const GetAsignaturaWithCurso = (dataCurso) => {

@@ -5,6 +5,7 @@ import Login from "./reducers/login"
 import Students from "./reducers/students"
 import Teachers from "./reducers/teachers"
 import Course from "./reducers/course"
+import Assignments from "./reducers/assignments"
 const rootReducer = (asyncReducers) => (state, action) => {
     const combinedReducer = combineReducers({
         theme,
@@ -13,6 +14,7 @@ const rootReducer = (asyncReducers) => (state, action) => {
         Students,
         Teachers,
         Course,
+        Assignments,
         ...asyncReducers,
     })
     return combinedReducer(state, action)
