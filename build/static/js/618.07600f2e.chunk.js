@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkemilus=self.webpackChunkemilus||[]).push([[618],{1618:function(n,a,e){e.r(a),e.d(a,{DefaultDashboard:function(){return f}});var r=e(2791),t=e(364),u=e(4089),s=e(184),f=function(n){var a=n.goDashboard;n.dataUser;return(0,r.useEffect)((function(){a()}),[]),(0,s.jsx)(s.Fragment,{children:"Dashboard"})};a.default=(0,t.$j)((function(n){return{dataUser:u.wl.getDataUser(n)}}),(function(n){return{goDashboard:function(){}}}))(f)}}]);
+//# sourceMappingURL=618.07600f2e.chunk.js.map

@@ -1,6 +1,6 @@
 import { post } from "./api_helper"
 
-const apiURL = "http://instituto-japon-asistencia.com/services/web-services.php"
+const apiURL = "https://instituto-japon-asistencia.com/services/web-services.php"
 
 export const loginStep1 = (usuario, password) => {
     return post(apiURL, { usuario, password, inicioSesion: 0 })
