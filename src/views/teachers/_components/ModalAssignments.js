@@ -8,8 +8,8 @@ const ModalAssignments = ({
                               getCoursesWithAssignments,
                               dataCourseWithAssignments,
                               isFetching,
-                              showModal,
-                              setShowModal,
+                              showModalAssigment,
+                              setShowModalAssigment,
                               getAllSubjects,
                               getSelectedSubjects,
                               dataSelectedSubjects,
@@ -101,7 +101,7 @@ const ModalAssignments = ({
     const hideModal = () => {
         saveTeacherSelectedAssignment(null);
         saveCourseSelectedAssignment(null);
-        setShowModal(false)
+        setShowModalAssigment(false)
     }
 
     const selectingCourse = (course) => {
@@ -127,7 +127,7 @@ const ModalAssignments = ({
     return (
         <Modal
             title="Asignaciones de cursos y asignaturas"
-            open={showModal}
+            open={showModalAssigment}
             width="75%"
             onOk={() => {
                 hideModal()

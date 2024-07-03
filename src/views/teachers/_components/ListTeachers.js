@@ -9,6 +9,7 @@ import ModalAssignments from "./ModalAssignments";
 
 const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher, saveTeacherSelectedAssignment}) => {
     const [showModal, setShowModal] = useState(false)
+    const [showModalAssigment, setShowModalAssigment] = useState(false)
     const [item, setItem] = useState(null)
     const [assignment, setAssignment] = useState(null)
 
@@ -108,7 +109,7 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher, save
     const loadTeacherAssignment = (teacher) => {
         saveTeacherSelectedAssignment(teacher)
         setAssignment(teacher);
-        setShowModal(true)
+        setShowModalAssigment(true)
     }
 
     return (
@@ -120,7 +121,7 @@ const ListTeachers = ({dataTeacher, isFetching, getTeachers, deleteTeacher, save
             {item &&
                 <ModalUpdateTeacher item={item} setItem={setItem} showModal={showModal} setShowModal={setShowModal}/>}
 
-            {assignment && <ModalAssignments showModal={showModal} setShowModal={setShowModal}/>}
+            {assignment && <ModalAssignments showModalAssigment={showModalAssigment} setShowModalAssigment={setShowModalAssigment}/>}
         </>
     )
 }
