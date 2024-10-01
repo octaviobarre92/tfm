@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SIDE_NAV_LIGHT, NAV_TYPE_SIDE } from "constants/ThemeConstant";
 import utils from 'utils'
 import { onMobileNavToggle } from 'store/slices/themeSlice';
+import navigationConfigTeacher from 'configs/NavigationConfigTeacher';
 
 const { useBreakpoint } = Grid;
 
@@ -28,7 +29,7 @@ const setDefaultOpen = (key) => {
 	return keyList;
 };
 
-const MenuItem = ({title, icon, path}) => {
+const MenuItem = ({ title, icon, path }) => {
 
 	const dispatch = useDispatch();
 
@@ -42,7 +43,7 @@ const MenuItem = ({title, icon, path}) => {
 
 	return (
 		<>
-			{icon && <Icon type={icon} /> }
+			{icon && <Icon type={icon} />}
 			<span>{title}</span>
 			{path && <Link onClick={closeMobileNav} to={path} />}
 		</>
@@ -52,26 +53,28 @@ const MenuItem = ({title, icon, path}) => {
 const getSideNavMenuItem = (navItem) => navItem.map(nav => {
 	return {
 		key: nav.key,
-		label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : {path: nav.path, icon: nav.icon})} />,
-		...(nav.isGroupTitle ? {type: 'group'} : {}),
-		...(nav.submenu.length > 0 ? {children: getSideNavMenuItem(nav.submenu)} : {})
+		label: <MenuItem title={nav.title} {...(nav.isGroupTitle ? {} : { path: nav.path, icon: nav.icon })} />,
+		...(nav.isGroupTitle ? { type: 'group' } : {}),
+		...(nav.submenu.length > 0 ? { children: getSideNavMenuItem(nav.submenu) } : {})
 	}
 })
 
 const getTopNavMenuItem = (navItem) => navItem.map(nav => {
 	return {
 		key: nav.key,
-		label: <MenuItem title={nav.title} icon={nav.icon} {...(nav.isGroupTitle ? {} : {path: nav.path})} />,
-		...(nav.submenu.length > 0 ? {children: getTopNavMenuItem(nav.submenu)} : {})
+		label: <MenuItem title={nav.title} icon={nav.icon} {...(nav.isGroupTitle ? {} : { path: nav.path })} />,
+		...(nav.submenu.length > 0 ? { children: getTopNavMenuItem(nav.submenu) } : {})
 	}
 })
 
 const SideNavContent = (props) => {
+	let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
 
 	const { routeInfo, hideGroupTitle, sideNavTheme = SIDE_NAV_LIGHT } = props;
 
-	const menuItems = useMemo(() => getSideNavMenuItem(navigationConfig), []);
-
+	const menuItemsAdmin = useMemo(() => getSideNavMenuItem(navigationConfig), []);
+	const menuItems = useMemo(() => getSideNavMenuItem(navigationConfigTeacher), []);
+	
 	return (
 		<Menu
 			mode="inline"
@@ -80,20 +83,20 @@ const SideNavContent = (props) => {
 			defaultSelectedKeys={[routeInfo?.key]}
 			defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
 			className={hideGroupTitle ? "hide-group-title" : ""}
-			items={menuItems}
+			items={dataUser["TIPO_USER"] === "TEACHER" ? menuItems : menuItemsAdmin}
 		/>
 	);
 };
 
-const TopNavContent = () => {
+const TopNavContent = (props) => {
 
 	const topNavColor = useSelector(state => state.theme.topNavColor);
-
+	
 	const menuItems = useMemo(() => getTopNavMenuItem(navigationConfig), [])
 
 	return (
-		<Menu 
-			mode="horizontal" 
+		<Menu
+			mode="horizontal"
 			style={{ backgroundColor: topNavColor }}
 			items={menuItems}
 		/>
@@ -101,10 +104,12 @@ const TopNavContent = () => {
 };
 
 const MenuContent = (props) => {
+	let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
+	
 	return props.type === NAV_TYPE_SIDE ? (
 		<SideNavContent {...props} />
 	) : (
-		<TopNavContent {...props} />
+		<TopNavContent dataUser={dataUser} {...props} />
 	);
 };
 

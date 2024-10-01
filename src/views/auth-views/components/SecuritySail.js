@@ -37,7 +37,7 @@ export const SecuritySail = ({ dataUser, token, goDashboard, validateImageSucces
                         'Bienvenido a la plataforma de asistencia!',
                     icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
                 });
-                navigate("/app/dashboards/default")
+                navigate("/app/report")
             } else {
                 notification.open({
                     message: 'Error de validación',

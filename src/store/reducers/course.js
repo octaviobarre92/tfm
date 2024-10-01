@@ -1,3 +1,5 @@
+
+
 export const types = {
     COURSE_REQUEST: "COURSE/COURSE_REQUEST",
     COURSE_SUCCESS: "COURSE/COURSE_SUCCESS",
@@ -35,6 +37,11 @@ export const types = {
     ESTUDIANTES_WITH_ASIGNATURAS_SUCCESS: "ASIGNATURA/ESTUDIANTES_WITH_ASIGNATURAS_SUCCESS",
     ESTUDIANTES_WITH_ASIGNATURAS_FAILURE: "ASIGNATURA/ESTUDIANTES_WITH_ASIGNATURAS_FAILURE",
 
+
+    ASISTENCIA_ESTUDIANTE_REQUEST: "ASIGNATURA/ASISTENCIA_ESTUDIANTE_REQUEST",
+    ASISTENCIA_ESTUDIANTE_SUCCESS: "ASIGNATURA/ASISTENCIA_ESTUDIANTE_SUCCESS",
+    ASISTENCIA_ESTUDIANTE_FAILURE: "ASIGNATURA/ASISTENCIA_ESTUDIANTE_FAILURE",
+
     CURSOS_TEACHER_REQUEST: "ASIGNATURA/CURSOS_TEACHER_REQUEST",
     CURSOS_TEACHER_SUCCESS: "ASIGNATURA/CURSOS_TEACHER_SUCCESS",
     CURSOS_TEACHER_FAILURE: "ASIGNATURA/CURSOS_TEACHER_FAILURE",
@@ -59,6 +66,8 @@ export const INITIAL_STATE = {
     asignaturas: [],
     estudiantes: [],
     cursos: [],
+    fetchingAsistencia: false,
+    asistencias: [],
 }
 
 export default (state = INITIAL_STATE, action = {}) => {
@@ -68,6 +77,8 @@ export default (state = INITIAL_STATE, action = {}) => {
         dataAsignatura,
         asignaturas,
         estudiantes,
+        asistencias,
+        fetchingAsistencia,
         cursos,
         ...rest
     } = action;
@@ -143,6 +154,8 @@ export default (state = INITIAL_STATE, action = {}) => {
             return {
                 ...state,
                 fetchingAsignatura: true,
+                asignaturas: [],
+                estudiantes: []
             };
         case types.ASIGNATURA_WITH_TEACHER_SUCCESS:
             return {
@@ -161,16 +174,31 @@ export default (state = INITIAL_STATE, action = {}) => {
                 fetchingEstudiante: false,
                 estudiantes
             };
+        case types.ASISTENCIA_ESTUDIANTE_REQUEST:
+            return {
+                ...state,
+                fetchingAsistencia: true,
+            };
+        case types.ASISTENCIA_ESTUDIANTE_SUCCESS:
+            return {
+                ...state,
+                fetchingAsistencia: false,
+                asistencias
+            };
         case types.CURSOS_TEACHER_REQUEST:
             return {
                 ...state,
                 fetchingCourse: true,
+                cursos: [],
+                asignaturas: [],
+                estudiantes: []
             };
         case types.CURSOS_TEACHER_SUCCESS:
             return {
                 ...state,
                 fetchingCourse: false,
-                cursos
+                cursos,
+                asignaturas: [],
             };
         case types.ASISTENCIA_SEND_REQUEST:
             return {
@@ -209,16 +237,23 @@ export const actions = {
         type: types.UPDATE_ASIGNATURA_REQUEST,
         dataAsignatura
     }),
-    GetAsignaturaWithCurso: (idCurso) => ({
+    GetAsignaturaWithCurso: (idCurso, teacherId = null) => ({
         type: types.ASIGNATURA_WITH_TEACHER_REQUEST,
-        idCurso
+        idCurso,
+        teacherId
     }),
-    GetCourseWithTeacher: () => ({
-        type: types.CURSOS_TEACHER_REQUEST
+    GetCourseWithTeacher: (idTeacher = null) => ({
+        type: types.CURSOS_TEACHER_REQUEST,
+        idTeacher
     }),
-    GetStudentsWithAsignatura: (idAsignatura) => ({
+    GetStudentsWithAsignatura: (idAsignatura, teacherId = null) => ({
         type: types.ESTUDIANTES_WITH_ASIGNATURAS_REQUEST,
-        idAsignatura
+        idAsignatura,
+        teacherId
+    }),
+    GetAsistenciaPorEstudiante: (data) => ({
+        type: types.ASISTENCIA_ESTUDIANTE_REQUEST,
+        data
     }),
     sendAsistencia: (dataAsistencia) => ({
         type: types.ASISTENCIA_SEND_REQUEST,
@@ -239,4 +274,6 @@ export const selectors = {
     getFetchingcursos: ({ Course }) => Course.fetchingCourse,
     getFetchingestudiantes: ({ Course }) => Course.fetchingEstudiante,
     getFetchingasignaturas: ({ Course }) => Course.fetchingAsignatura,
+    getFetchingAsistencia: ({ Course }) => Course.fetchingAsistencia,
+    getAsistencias: ({ Course }) => Course.asistencias,
 }

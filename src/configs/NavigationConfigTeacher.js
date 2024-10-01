@@ -87,4 +87,4 @@ let navigationConfigTeacher = [
   ...dashboardTeacher
 ]
 // dataUser["TIPO_USER"] === "TEACHER" ? navigationConfigTeacher : navigationConfigAdmin
-export default navigationConfigAdmin;
+export default navigationConfigTeacher;

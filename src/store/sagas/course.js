@@ -1,6 +1,6 @@
 import { takeEvery, takeLatest, take, call, fork, put } from "redux-saga/effects";
 import { types } from "../reducers/course"
-import { GetAsignaturaWithCurso, GetCourseWithTeacher, GetStudentsWithAsignatura, actualizarEstudiante, actualizarCurso, cargarCursos, guardarCurso, cargarAsignatura, guardarAsignatura, actualizarAsignatura, eliminar, SendAsistencia } from "./middlewares"
+import { GetAsignaturaWithCurso, GetCourseWithTeacher, GetStudentsWithAsignatura, actualizarEstudiante, actualizarCurso, cargarCursos, guardarCurso, cargarAsignatura, guardarAsignatura, actualizarAsignatura, eliminar, SendAsistencia, getAsistenciasPorEstudiantes } from "./middlewares"
 
 function* course() {
     yield takeLatest(types.COURSE_REQUEST, loadCourseAll);
@@ -14,6 +14,7 @@ function* course() {
     yield takeLatest(types.ASIGNATURA_WITH_TEACHER_REQUEST, getAsignaturaPorCurso);
     yield takeLatest(types.CURSOS_TEACHER_REQUEST, getCursoTeacher);
     yield takeLatest(types.ESTUDIANTES_WITH_ASIGNATURAS_REQUEST, getEstudiantesAsignatura);
+    yield takeLatest(types.ASISTENCIA_ESTUDIANTE_REQUEST, getAsistenciasPorEstudiante);
 
     yield takeLatest(types.ASISTENCIA_SEND_REQUEST, guardarAsistencia);
 }
@@ -26,25 +27,33 @@ function* guardarAsistencia({ dataAsistencia }) {
         asignaturas: response.data.data
     })
 }
-function* getAsignaturaPorCurso({ idCurso }) {
+function* getAsignaturaPorCurso({ idCurso, teacherId = null }) {
     let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
-    const response = yield call(GetAsignaturaWithCurso, { idCurso: idCurso, ID_USER: dataUser["ID_USER"] })
+    const response = yield call(GetAsignaturaWithCurso, { idCurso: idCurso, ID_USER: teacherId ? teacherId : dataUser["ID_USER"] })
     yield put({
         type: types.ASIGNATURA_WITH_TEACHER_SUCCESS,
         asignaturas: response.data.data
     })
 }
-function* getCursoTeacher() {
+function* getCursoTeacher({ idTeacher = null }) {
     let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
-    const response = yield call(GetCourseWithTeacher, { ID_USER: dataUser["ID_USER"] })
+    const response = yield call(GetCourseWithTeacher, { ID_USER: idTeacher ? idTeacher : dataUser["ID_USER"] })
     yield put({
         type: types.CURSOS_TEACHER_SUCCESS,
         cursos: response.data.data
     })
 }
-function* getEstudiantesAsignatura({ idAsignatura }) {
+function* getAsistenciasPorEstudiante({ data }) {
+
+    const response = yield call(getAsistenciasPorEstudiantes, { idEstudiante: data.idEstudiante })
+    yield put({
+        type: types.ASISTENCIA_ESTUDIANTE_SUCCESS,
+        asistencias: response.data.data
+    })
+}
+function* getEstudiantesAsignatura({ idAsignatura, teacherId = null }) {
     let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
-    const response = yield call(GetStudentsWithAsignatura, { idAsignatura: idAsignatura, ID_USER: dataUser["ID_USER"] })
+    const response = yield call(GetStudentsWithAsignatura, { idAsignatura: idAsignatura, ID_USER: teacherId ? teacherId : dataUser["ID_USER"] })
     yield put({
         type: types.ESTUDIANTES_WITH_ASIGNATURAS_SUCCESS,
         estudiantes: response.data.data

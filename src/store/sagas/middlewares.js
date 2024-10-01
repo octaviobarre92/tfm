@@ -91,3 +91,8 @@ export const GetStudentsWithAsignatura = (dataAsignatura) => {
 export const SendAsistencia = (dataAsistencia) => {
     return post(apiURL, { ...dataAsistencia, guardarAsistencia: 0 })
 }
+
+
+export const getAsistenciasPorEstudiantes = (dataAsistencia) => {
+    return post(apiURL, { ...dataAsistencia, getEstuReportPorId: 0 })
+}
