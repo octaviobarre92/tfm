@@ -199,6 +199,7 @@ export default (state = INITIAL_STATE, action = {}) => {
                 fetchingCourse: false,
                 cursos,
                 asignaturas: [],
+                
             };
         case types.ASISTENCIA_SEND_REQUEST:
             return {

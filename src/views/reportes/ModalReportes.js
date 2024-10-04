@@ -42,6 +42,7 @@ export const ModalReportes = ({ estudianteSelect, asignaturaId, asignaturas, dat
                 open={showModal}
                 width="60%"
                 okText="Aceptar"
+                onOk={() => { setshowModal(!showModal) }}
                 onCancel={() => { setshowModal(!showModal) }}
                 cancelText="Cancelar"
             >

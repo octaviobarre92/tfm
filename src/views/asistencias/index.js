@@ -18,14 +18,17 @@ export const Asistencias = ({ fetching, callCourse, cursos, asignaturas, callAsi
     const [estudiantesData, setestudiantesData] = useState([]);
     const [asistencia, setasistencia] = useState([]);
     const formRef = useRef(null);
+
     useEffect(() => {
         callCourse()
+        setestudiantesData([])
     }, [])
     useEffect(() => {
         if (estudiantes.length > 0) {
             let newData = [];
-            for (let i = 0; i < estudiantes.length - 1; i++) {
+            for (let i = 0; i < estudiantes.length; i++) {
                 estudiantes[i]["key"] = i + 1;
+                estudiantes[i]["estadoAsistencia"] = 0;
                 newData.push(estudiantes[i])
             }
             setestudiantesData(newData)
@@ -111,21 +114,22 @@ export const Asistencias = ({ fetching, callCourse, cursos, asignaturas, callAsi
     const guardar = () => {
         if (hora && cursoId && asignaturaId) {
             let data = [];
-            for (let i = 0; i < (estudiantes.length - 1); i++) {
-                let otherData = asistencia.find((x) => x.idEstudiante === estudiantes[i].idEstudiante);
+            for (let i = 0; i < (estudiantesData.length); i++) {
+                let otherData = asistencia.find((x) => x.idEstudiante === estudiantesData[i].idEstudiante);
                 if (!otherData) {
-                    data.push(estudiantes[i])
+                    data.push(estudiantesData[i])
                 }
             }
-
             if (data.length > 0) {
                 for (let j = 0; j < (data.length); j++) {
                     data[j]["comentario"] = document.getElementById(data[j].idEstudiante).value;
+                    data[j]["estadoAsistencia"] = 1
                 }
             }
             let dataSendAsistencia = [...asistencia, ...data];
             let sendData = { fecha: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), fkCursoAsistencia: asignaturaId, hora: hora, registros: JSON.stringify(dataSendAsistencia) }
             guardarAsistencia(sendData)
+            setestudiantesData([])
         } else {
             notification.open({
                 message: 'Faltan datos',
@@ -230,6 +234,12 @@ const mapDispatchToProps = (dispatch) => ({
     },
     guardarAsistencia: (dataAsistencia) => {
         dispatch(actionCourse.sendAsistencia(dataAsistencia));
+        notification.open({
+            message: 'Exitoso!',
+            description:
+                'Asistencias registradas de forma exitosa!',
+            icon: <CheckCircleOutlined style={{ color: '#108ee9' }} />,
+        });
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Asistencias)

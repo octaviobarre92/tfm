@@ -72,19 +72,21 @@ const MenuItemSignOut = (props) => {
 const items = [
 	{
 		key: 'Sign Out',
-		label: <MenuItemSignOut label="Sign Out" />,
+		label: <MenuItemSignOut label="Salir" />,
 	}
 ]
 
 export const NavProfile = ({mode}) => {
+let dataUser = JSON.parse(atob(localStorage.getItem("auth_token")))
+
 	return (
 		<Dropdown placement="bottomRight" menu={{items}} trigger={["click"]}>
 			<NavItem mode={mode}>
 				<Profile>
-					<Avatar src="/img/avatars/thumb-1.jpg" />
+					<Avatar src="https://static.vecteezy.com/system/resources/previews/008/844/895/non_2x/user-icon-design-free-png.png" />
 					<UserInfo className="profile-text">
-						<Name>Charlie Howard</Name>
-						<Title>Frontend Developer</Title>
+						<Name>{dataUser.PRI_NOM_USER} {dataUser.PRIM_APE_USER}</Name>
+						<Title>Cerrar Sesión</Title>
 					</UserInfo>
 				</Profile>
 			</NavItem>
